@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\AbsensiController;
-use App\Http\Controllers\Admin\KaryawanController;
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\PresensiController;
@@ -24,19 +23,20 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/karyawan/create', [KaryawanController::class, 'handleCreate'])->name('admin.karyawan.create.handle');
     Route::delete('/karyawan/{id}', [KaryawanController::class, 'handleDelete'])->name('admin.karyawan.delete.handle');
 
-    Route::get('/presensi', [PresensiController::class, 'showList'])->name('admin.presensi.view');
-    Route::get('/presensi/create', [PresensiController::class, 'showCreate'])->name('admin.presensi.create.view');
-    Route::post('/presensi/create', [PresensiController::class, 'handleCreate'])->name('admin.presensi.create.handle');
-    Route::get('/presensi/detail/{id}', [PresensiController::class, 'showDetail'])->name('admin.presensi.detail.view');
+    Route::get('/presensi', [PresensiController::class, 'adminShowList'])->name('admin.presensi.view');
+    Route::get('/presensi/create', [PresensiController::class, 'adminShowCreate'])->name('admin.presensi.create.view');
+    Route::post('/presensi/create', [PresensiController::class, 'adminHandleCreate'])->name('admin.presensi.create.handle');
+    Route::get('/presensi/detail/{id}', [PresensiController::class, 'adminShowDetail'])->name('admin.presensi.detail.view');
+    Route::delete('/presensi/delete/{presensi}', [PresensiController::class, 'adminHandleDelete'])->name('admin.presensi.delete.handle');
 
     Route::get('cuti', [CutiController::class, 'adminShowList'])->name('admin.cuti.view');
     Route::post('cuti/{id}/{status}', [CutiController::class, 'adminHandleApproval'])->name('admin.cuti.approval');
 });
 
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
-    Route::get('/absensi', [AbsensiController::class, 'showList'])->name('user.absensi.view');
-    Route::get('/absensi/{id}', [AbsensiController::class, 'showForm'])->name('user.absensi.form.view');
-    Route::post('/absensi/{id}', [AbsensiController::class, 'handleSubmit'])->name('user.absensi.handle');
+    Route::get('/presensi', [PresensiController::class, 'userShowList'])->name('user.presensi.view');
+    Route::get('/presensi/{id}', [PresensiController::class, 'userShowForm'])->name('user.presensi.form.view');
+    Route::post('/presensi/{id}', [PresensiController::class, 'userHandleForm'])->name('user.presensi.form.handle');
 
     Route::get('/cuti', [CutiController::class, 'userShowList'])->name('user.cuti.view');
     Route::post('/cuti/submit', [CutiController::class, 'userHandleSubmit'])->name('user.cuti.handle');

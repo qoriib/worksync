@@ -21,7 +21,7 @@
                         </li>
                     @elseif (Auth::user()->role === 'user')
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->is('user/absensi*') ? 'active' : '' }}" href="{{ route('user.absensi.view') }}">Absensi</a>
+                            <a class="nav-link {{ request()->is('user/presensi*') ? 'active' : '' }}" href="{{ route('user.presensi.view') }}">Presensi</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ request()->is('user/cuti*') ? 'active' : '' }}" href="{{ route('user.cuti.view') }}">Pengajuan Cuti</a>

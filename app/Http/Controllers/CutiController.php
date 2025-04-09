@@ -49,6 +49,6 @@ class CutiController extends Controller
         $cuti->status = $status;
         $cuti->save();
 
-        return back()->with('success', 'Status cuti diperbarui.');
+        return redirect()->route('admin.cuti.view')->with('success', 'Status cuti diperbarui.');
     }
 }

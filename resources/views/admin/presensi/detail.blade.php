@@ -1,41 +1,54 @@
 @extends('_layouts.app')
 
 @section('content')
-<div class="container mt-4">
-    <h4 class="mb-3">Presensi: {{ \Carbon\Carbon::parse($presensi->tanggal)->format('d M Y') }}</h4>
-    <p><strong>Keterangan:</strong> {{ $presensi->keterangan ?? '-' }}</p>
+    <h4 class="text-center mb-4">Detail Presensi</h4>
 
-    <table class="table table-bordered mt-4">
-        <thead>
-            <tr>
-                <th>Nama Karyawan</th>
-                <th>Status</th>
-                <th>Bukti</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($presensi->absensis as $absen)
+    <table class="table">
+        <tr>
+            <th>Waktu Mulai:</th>
+            <td>{{ \Carbon\Carbon::parse($presensi->waktu_mulai)->format('d M Y H:i') }}</td>
+        </tr>
+        <tr>
+            <th>Waktu Selesai:</th>
+            <td>{{ \Carbon\Carbon::parse($presensi->waktu_selesai)->format('d M Y H:i') }}</td>
+        </tr>
+        <tr>
+            <th>Keterangan:</th>
+            <td>{{ $presensi->keterangan ?? '-' }}</td>
+        </tr>
+    </table>
+
+    @if($absensis->count())
+        <table class="table table-bordered mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Nama</th>
+                    <th>Status</th>
+                    <th>Waktu</th>
+                    <th>Bukti</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($absensis as $absen)
                 <tr>
                     <td>{{ $absen->user->name }}</td>
                     <td>
-                        <span class="badge bg-{{ $absen->status === 'hadir' ? 'success' : ($absen->status === 'terlambat' ? 'warning' : 'danger') }}">
+                        <span class="badge bg-{{ $absen->status === 'hadir' ? 'success' : 'warning' }}">
                             {{ ucfirst($absen->status) }}
                         </span>
                     </td>
                     <td>
-                        @if ($absen->bukti)
-                            <a href="{{ asset('storage/'.$absen->bukti) }}" target="_blank" class="btn btn-sm btn-primary">Lihat Bukti</a>
+                        @if($absen->bukti)
+                            <a href="{{ asset('storage/' . $absen->bukti) }}" target="_blank">Lihat</a>
                         @else
-                            <span class="text-muted">-</span>
+                            -
                         @endif
                     </td>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="3">Belum ada absensi untuk presensi ini.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
+                @endforeach
+            </tbody>
+        </table>
+    @else
+        <p class="text-center text-muted">Belum ada yang melakukan absensi.</p>
+    @endif
 @endsection

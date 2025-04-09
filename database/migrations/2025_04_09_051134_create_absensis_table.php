@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('presensi_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['hadir', 'izin', 'terlambat']);
+            $table->enum('status', ['hadir', 'izin']);
             $table->string('bukti')->nullable();
             $table->timestamps();
         });

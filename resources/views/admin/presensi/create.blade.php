@@ -1,23 +1,36 @@
 @extends('_layouts.app')
 
 @section('content')
-<div class="container mt-4">
-    <h4 class="mb-4">Buat Presensi Baru</h4>
+    <h4 class="text-center mb-4">Tambah Presensi Baru</h4>
 
-    <form action="{{ route('admin.presensi.create.handle') }}" method="POST">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Terjadi kesalahan:</strong>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
+    <form class="vstack gap-3" action="{{ route('admin.presensi.create.handle') }}" method="POST">
         @csrf
-
-        <div class="mb-3">
-            <label for="tanggal" class="form-label">Tanggal</label>
-            <input type="date" name="tanggal" class="form-control" required>
+        <div>
+            <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
+            <input type="datetime-local" name="waktu_mulai" class="form-control" required>
         </div>
-
-        <div class="mb-3">
-            <label for="keterangan" class="form-label">Keterangan (Opsional)</label>
-            <input type="text" name="keterangan" class="form-control">
+        <div>
+            <label for="waktu_selesai" class="form-label">Waktu Selesai</label>
+            <input type="datetime-local" name="waktu_selesai" class="form-control" required>
         </div>
-
-        <button type="submit" class="btn btn-success">Simpan</button>
+        <div>
+            <label for="keterangan" class="form-label">Keterangan (opsional)</label>
+            <textarea name="keterangan" class="form-control"></textarea>
+        </div>
+        <div class="hstack gap-2">
+            <button type="submit" class="btn btn-success">Simpan</button>
+            <a href="{{ route('admin.presensi.view') }}" class="btn btn-secondary">Batal</a>
+        </div>
     </form>
-</div>
 @endsection
