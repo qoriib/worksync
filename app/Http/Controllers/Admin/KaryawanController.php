@@ -11,8 +11,8 @@ class KaryawanController extends Controller
 {
     public function showList()
     {
-        $karyawan = Karyawan::with('user')->get();
-        return view('admin.karyawan.index', compact('karyawan'));
+        $karyawans = Karyawan::with('user')->get();
+        return view('admin.karyawan.index', compact('karyawans'));
     }
 
     public function showDetail($id)
@@ -49,5 +49,13 @@ class KaryawanController extends Controller
         ]);
 
         return redirect()->route('admin.karyawan.view');
+    }
+
+    public function handleDelete($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.karyawan.view')->with('success', 'Karyawan berhasil dihapus.');
     }
 }

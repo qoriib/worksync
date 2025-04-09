@@ -11,14 +11,20 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     @if (Auth::user()->role === 'admin')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.karyawan.view') }}">Data Karyawan</a>
+                            <a class="nav-link {{ request()->is('admin/karyawan*') ? 'active' : '' }}" href="{{ route('admin.karyawan.view') }}">Data Karyawan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->is('admin/presensi*') ? 'active' : '' }}" href="{{ route('admin.presensi.view') }}">Data Presensi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->is('admin/cuti*') ? 'active' : '' }}" href="{{ route('admin.cuti.view') }}">Data Cuti</a>
                         </li>
                     @elseif (Auth::user()->role === 'user')
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Presensi</a>
+                            <a class="nav-link {{ request()->is('user/absensi*') ? 'active' : '' }}" href="{{ route('user.absensi.view') }}">Absensi</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Pengajuan Cuti</a>
+                            <a class="nav-link {{ request()->is('user/cuti*') ? 'active' : '' }}" href="{{ route('user.cuti.view') }}">Pengajuan Cuti</a>
                         </li>
                     @endif
                 </ul>

@@ -15,4 +15,9 @@ class Presensi extends Model
     protected $casts = [
         'tanggal' => 'date',
     ];
+
+    public function absensis()
+    {
+        return $this->hasMany(Absensi::class);
+    }
 }

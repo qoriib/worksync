@@ -36,13 +36,13 @@ class User extends Authenticatable
         return $this->hasOne(Karyawan::class);
     }
 
-    public function presensis(): HasMany
-    {
-        return $this->hasMany(Presensi::class);
-    }
-
     public function cutis(): HasMany
     {
         return $this->hasMany(Cuti::class);
+    }
+
+    public function absensis()
+    {
+        return $this->hasMany(Absensi::class);
     }
 }
