@@ -13,8 +13,26 @@ class Karyawan extends Model
     protected $fillable = [
         'user_id',
         'jabatan',
-        'no_telp',
+        'nama_panggilan',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'golongan_darah',
+        'agama',
         'alamat',
+        'no_hp',
+        'status',
+        'jumlah_anak',
+        'tinggi_badan',
+        'berat_badan',
+        'no_ktp',
+        'ktp_berlaku_sampai',
+        'tinggal_dengan_keluarga',
+        'anak_ke',
+        'darurat_nama',
+        'darurat_hubungan',
+        'darurat_telepon',
+        'darurat_alamat',
+        'dokumen_pendukung',
     ];
 
     public function user(): BelongsTo

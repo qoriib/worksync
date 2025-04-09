@@ -16,10 +16,28 @@ class KaryawanFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(), // buat user otomatis jika belum disediakan
+            'user_id' => User::factory(),
             'jabatan' => $this->faker->randomElement(['Staf', 'Supervisor', 'Manager']),
-            'no_telp' => $this->faker->phoneNumber(),
+            'nama_panggilan' => $this->faker->firstName(),
+            'tempat_lahir' => $this->faker->city(),
+            'tanggal_lahir' => $this->faker->date('Y-m-d', '-20 years'),
+            'golongan_darah' => $this->faker->randomElement(['A', 'B', 'AB', 'O']),
+            'agama' => $this->faker->randomElement(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha']),
             'alamat' => $this->faker->address(),
+            'no_hp' => $this->faker->phoneNumber(),
+            'status' => $this->faker->randomElement(['Belum Kawin', 'Kawin']),
+            'jumlah_anak' => $this->faker->numberBetween(0, 4),
+            'tinggi_badan' => $this->faker->numberBetween(150, 180),
+            'berat_badan' => $this->faker->numberBetween(45, 90),
+            'no_ktp' => $this->faker->nik(),
+            'ktp_berlaku_sampai' => $this->faker->dateTimeBetween('+1 years', '+10 years'),
+            'tinggal_dengan_keluarga' => $this->faker->boolean(),
+            'anak_ke' => $this->faker->numberBetween(1, 5),
+            'darurat_nama' => $this->faker->name(),
+            'darurat_hubungan' => $this->faker->randomElement(['Ayah', 'Ibu', 'Saudara', 'Teman']),
+            'darurat_telepon' => $this->faker->phoneNumber(),
+            'darurat_alamat' => $this->faker->address(),
+            'dokumen_pendukung' => null, // default null
         ];
     }
 }

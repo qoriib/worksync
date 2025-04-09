@@ -9,33 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function showRegister()
-    {
-        return view('auth.register');
-    }
-
-    public function handleRegister(Request $request)
-    {
-        $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        // Buat user baru
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => 'user', // default sebagai user
-        ]);
-
-        // Login otomatis setelah register
-        Auth::login($user);
-
-        return redirect('/dashboard')->with('success', 'Registrasi berhasil!');
-    }
-
     public function showLogin()
     {
         return view('auth.login');
@@ -51,7 +24,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect('/dashboard')->with('success', 'Login berhasil!');
+            return redirect()->route('dashboard.redirect')->with('success', 'Login berhasil!');
         }
 
         return back()->withErrors([
@@ -66,6 +39,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('success', 'Logout berhasil!');
+        return redirect()->route('login')->with('success', 'Logout berhasil!');
     }
 }

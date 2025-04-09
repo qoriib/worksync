@@ -9,19 +9,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register.view');
     Route::post('/login', [AuthController::class, 'handleLogin'])->name('login.handle');
-    Route::post('/register', [AuthController::class, 'handleRegister'])->name('register.handle');
 });
 
 Route::post('/logout', [AuthController::class, 'handleLogout'])->name('logout.handle');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/karyawan', [KaryawanController::class, 'showList'])->name('admin.karyawan.view');
-    Route::get('/karyawan/detail/{id}', [KaryawanController::class, 'showDetail'])->name('admin.karyawan.detail.view');
-    Route::get('/karyawan/create', [KaryawanController::class, 'showCreate'])->name('admin.karyawan.create.view');
-    Route::post('/karyawan/create', [KaryawanController::class, 'handleCreate'])->name('admin.karyawan.create.handle');
-    Route::delete('/karyawan/{id}', [KaryawanController::class, 'handleDelete'])->name('admin.karyawan.delete.handle');
+    Route::get('/karyawan', [KaryawanController::class, 'adminShowList'])->name('admin.karyawan.view');
+    Route::get('/karyawan/detail/{id}', [KaryawanController::class, 'adminShowDetail'])->name('admin.karyawan.detail.view');
+    Route::get('/karyawan/create', [KaryawanController::class, 'adminShowCreate'])->name('admin.karyawan.create.view');
+    Route::post('/karyawan/create', [KaryawanController::class, 'adminHandleCreate'])->name('admin.karyawan.create.handle');
+    Route::delete('/karyawan/{id}', [KaryawanController::class, 'adminHandleDelete'])->name('admin.karyawan.delete.handle');
 
     Route::get('/presensi', [PresensiController::class, 'adminShowList'])->name('admin.presensi.view');
     Route::get('/presensi/create', [PresensiController::class, 'adminShowCreate'])->name('admin.presensi.create.view');

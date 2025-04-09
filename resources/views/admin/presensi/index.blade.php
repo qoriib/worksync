@@ -3,7 +3,7 @@
 @section('content')
     <div class="hstack justify-content-between gap-3 mb-4">
         <h4 class="mb-0">Daftar Presensi</h4>
-        <a href="{{ route('admin.presensi.create.view') }}" class="btn btn-primary">Tambah</a>
+        <a href="{{ route('admin.presensi.create.view') }}" class="btn btn-success">Tambah</a>
     </div>
 
     @if(session('success'))
