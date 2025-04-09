@@ -13,46 +13,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Admin HR
-        $admin = User::create([
-            'name' => 'Admin HR',
-            'email' => 'admin@worksync.com',
-            'password' => Hash::make('worksync'),
+        User::create([
+            'name' => 'Admin HR 1',
+            'email' => 'admin1@worksync.com',
             'role' => 'admin',
-        ]);
-
-        $admin->karyawan()->create([
-            'jabatan' => 'HR Manager',
-            'no_telp' => '081234567891',
-            'alamat' => 'Jl. HRD No. 1',
-        ]);
-
-        // Karyawan 1
-        $user1 = User::create([
-            'name' => 'Karyawan Satu',
-            'email' => 'user1@worksync.com',
             'password' => Hash::make('worksync'),
-            'role' => 'user',
         ]);
 
-        $user1->karyawan()->create([
-            'jabatan' => 'Staff IT',
-            'no_telp' => '081234567892',
-            'alamat' => 'Jl. Mawar No. 2',
-        ]);
-
-        // Karyawan 2
-        $user2 = User::create([
-            'name' => 'Karyawan Dua',
-            'email' => 'user2@worksync.com',
+        User::create([
+            'name' => 'Admin HR 2',
+            'email' => 'admin2@worksync.com',
+            'role' => 'admin',
             'password' => Hash::make('worksync'),
-            'role' => 'user',
         ]);
 
-        $user2->karyawan()->create([
-            'jabatan' => 'Staff Finance',
-            'no_telp' => '081234567893',
-            'alamat' => 'Jl. Melati No. 3',
+        User::factory()->count(10)->create([
+            'role' => 'user',
         ]);
     }
 }

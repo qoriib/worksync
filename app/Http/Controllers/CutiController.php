@@ -9,13 +9,11 @@ class CutiController extends Controller
 {
     public function userShowList()
     {
-        $cutis = auth()->user()->cutis;
-        return view('user.cuti.index', compact('cutis'));
-    }
+        $cutis = Cuti::where('user_id', auth()->id())
+            ->orderByDesc('created_at')
+            ->get();
 
-    public function userShowForm()
-    {
-        return view('user.cuti.form');
+        return view('user.cuti.index', compact('cutis'));
     }
 
     public function userHandleSubmit(Request $request)
@@ -38,7 +36,10 @@ class CutiController extends Controller
 
     public function adminShowList()
     {
-        $cutis = Cuti::with('user')->latest()->get();
+        $cutis = Cuti::with('user')
+            ->orderByDesc('created_at')
+            ->get();
+
         return view('admin.cuti.index', compact('cutis'));
     }
 

@@ -1,15 +1,23 @@
 @extends('_layouts.app')
 
 @section('content')
-    <h4 class="mb-4">Pengajuan Cuti Karyawan</h4>
+    <h4 class="text-center mb-4">Pengajuan Cuti Karyawan</h4>
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     <div class="table-responsive">
         <table class="table table-bordered align-middle">
             <thead class="table-light text-center">
                 <tr>
-                    <th>Nama Karyawan</th>
-                    <th>Periode</th>
-                    <th>Alasan</th>
+                    <th style="min-width: 10rem">Nama</th>
+                    <th style="min-width: 7.5rem">Dari</th>
+                    <th style="min-width: 7.5rem">Hingga</th>
+                    <th style="min-width: 15rem">Alasan</th>
                     <th>Status</th>
                     <th class="text-center">Aksi</th>
                 </tr>
@@ -18,17 +26,15 @@
                 @forelse($cutis as $index => $cuti)
                     <tr>
                         <td>{{ $cuti->user->name }}</td>
-                        <td>
-                            {{ \Carbon\Carbon::parse($cuti->tanggal_mulai)->format('d M Y') }} -
-                            {{ \Carbon\Carbon::parse($cuti->tanggal_selesai)->format('d M Y') }}
-                        </td>
+                        <td class="text-center">{{ \Carbon\Carbon::parse($cuti->tanggal_mulai)->format('d M Y') }}</td>
+                        <td class="text-center">{{ \Carbon\Carbon::parse($cuti->tanggal_selesai)->format('d M Y') }}</td>
                         <td>{{ $cuti->alasan }}</td>
                         <td class="text-center">
                             <span class="badge bg-{{ $cuti->status === 'approved' ? 'success' : ($cuti->status === 'rejected' ? 'danger' : 'secondary') }}">
                                 {{ ucfirst($cuti->status) }}
                             </span>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center text-nowrap">
                             @if ($cuti->status === 'pending')
                                 <form action="{{ route('admin.cuti.approval', [$cuti->id, 'approved']) }}" method="POST" class="d-inline">
                                     @csrf

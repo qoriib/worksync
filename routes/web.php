@@ -5,10 +5,11 @@ use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\PresensiController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login.view');
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register.view');
     Route::post('/login', [AuthController::class, 'handleLogin'])->name('login.handle');
     Route::post('/register', [AuthController::class, 'handleRegister'])->name('register.handle');
@@ -38,6 +39,27 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::post('/absensi/{id}', [AbsensiController::class, 'handleSubmit'])->name('user.absensi.handle');
 
     Route::get('/cuti', [CutiController::class, 'userShowList'])->name('user.cuti.view');
-    Route::get('/cuti/form', [CutiController::class, 'userShowForm'])->name('user.cuti.form');
     Route::post('/cuti/submit', [CutiController::class, 'userHandleSubmit'])->name('user.cuti.handle');
 });
+
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
+Route::get('/dashboard', function () {
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+
+    return redirect()->route('dashboard.redirect');
+})->name('dashboard');
+
+Route::get('/redirect-dashboard', function () {
+    $user = Auth::user();
+
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.karyawan.view');
+    } else {
+        return redirect()->route('user.absensi.view');
+    }
+})->name('dashboard.redirect')->middleware('auth');
