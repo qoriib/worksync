@@ -34,7 +34,6 @@ return new class extends Migration
             $table->string('darurat_hubungan')->nullable();
             $table->string('darurat_telepon')->nullable();
             $table->text('darurat_alamat')->nullable();
-            $table->string('dokumen_pendukung')->nullable();
             $table->timestamps();
         });
     }

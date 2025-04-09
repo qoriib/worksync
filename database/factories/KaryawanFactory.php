@@ -37,7 +37,6 @@ class KaryawanFactory extends Factory
             'darurat_hubungan' => $this->faker->randomElement(['Ayah', 'Ibu', 'Saudara', 'Teman']),
             'darurat_telepon' => $this->faker->phoneNumber(),
             'darurat_alamat' => $this->faker->address(),
-            'dokumen_pendukung' => null, // default null
         ];
     }
 }

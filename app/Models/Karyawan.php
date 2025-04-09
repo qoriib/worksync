@@ -32,7 +32,6 @@ class Karyawan extends Model
         'darurat_hubungan',
         'darurat_telepon',
         'darurat_alamat',
-        'dokumen_pendukung',
     ];
 
     public function user(): BelongsTo

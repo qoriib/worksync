@@ -1,7 +1,14 @@
 @extends('_layouts.app')
 
 @section('content')
-    <h4 class="text-center mb-4">Informasi Karyawan</h4>
+    <h4 class="text-center mb-4">Profil Saya</h4>
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     <div class="row">
         <div class="col">
@@ -139,5 +146,7 @@
         </div>
     </div>
 
-    <a href="{{ route('admin.karyawan.view') }}" class="btn btn-secondary mt-3">Kembali</a>
+    <div class="vstack align-items-center">
+        <a href="{{ route('user.profile.edit.view') }}" class="btn btn-primary mt-3">Ubah Profil</a>
+    </div>
 @endsection

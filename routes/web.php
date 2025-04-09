@@ -32,6 +32,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
+    Route::get('/profile', [KaryawanController::class, 'userShowProfile'])->name('user.profile.view');
+    Route::get('/profile/edit', [KaryawanController::class, 'userShowProfileEdit'])->name('user.profile.edit.view');
+    Route::put('/profile/update', [KaryawanController::class, 'userHandleProfileEdit'])->name('user.profile.edit.handle');
+
     Route::get('/presensi', [PresensiController::class, 'userShowList'])->name('user.presensi.view');
     Route::get('/presensi/{id}', [PresensiController::class, 'userShowForm'])->name('user.presensi.form.view');
     Route::post('/presensi/{id}', [PresensiController::class, 'userHandleForm'])->name('user.presensi.form.handle');
@@ -58,6 +62,6 @@ Route::get('/redirect-dashboard', function () {
     if ($user->role === 'admin') {
         return redirect()->route('admin.karyawan.view');
     } else {
-        return redirect()->route('user.presensi.view');
+        return redirect()->route('user.profile.view');
     }
 })->name('dashboard.redirect')->middleware('auth');
