@@ -58,6 +58,6 @@ Route::get('/redirect-dashboard', function () {
     if ($user->role === 'admin') {
         return redirect()->route('admin.karyawan.view');
     } else {
-        return redirect()->route('user.absensi.view');
+        return redirect()->route('user.presensi.view');
     }
 })->name('dashboard.redirect')->middleware('auth');

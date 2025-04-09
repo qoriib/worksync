@@ -37,10 +37,10 @@ class PresensiController extends Controller
         return redirect()->route('admin.presensi.view')->with('success', 'Presensi berhasil dibuat.');
     }
 
-    public function adminShowDetail(Presensi $presensi)
+    public function adminShowDetail($presensiId)
     {
-        $absensis = $presensi->absensis()->with('user')->get();
-
+        $presensi = Presensi::find($presensiId);
+        $absensis = Absensi::where('presensi_id', $presensiId)->get();
         return view('admin.presensi.detail', compact('presensi', 'absensis'));
     }
 
