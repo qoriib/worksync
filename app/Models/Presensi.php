@@ -10,18 +10,23 @@ class Presensi extends Model
     use HasFactory;
 
     protected $fillable = [
-        'waktu_mulai',
-        'waktu_selesai',
+        'jenis',
+        'waktu',
         'keterangan',
     ];
 
     protected $casts = [
-        'waktu_mulai' => 'datetime',
-        'waktu_selesai' => 'datetime',
+        'waktu' => 'datetime',
     ];
 
-    public function absensis()
+    public function pengajuans()
     {
-        return $this->hasMany(Absensi::class);
+        return $this->hasMany(PengajuanPresensi::class);
+    }
+
+    public function getKeterlambatanMenitAttribute()
+    {
+        $jamMasuk = now()->setTime(8, 0); // default jam masuk
+        return max(0, $this->waktu->diffInMinutes($jamMasuk));
     }
 }

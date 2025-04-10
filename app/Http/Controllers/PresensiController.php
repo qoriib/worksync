@@ -10,7 +10,7 @@ class PresensiController extends Controller
 {
     public function adminShowList()
     {
-        $presensis = Presensi::orderByDesc('waktu_mulai')->get();
+        $presensis = Presensi::orderByDesc('waktu')->get();
 
         return view('admin.presensi.index', compact('presensis'));
     }
@@ -23,25 +23,25 @@ class PresensiController extends Controller
     public function adminHandleCreate(Request $request)
     {
         $request->validate([
-            'waktu_mulai' => 'required|date',
-            'waktu_selesai' => 'required|date|after:waktu_mulai',
+            'jenis' => 'required|in:absensi,terlambat,keluar',
+            'waktu' => 'required|date',
             'keterangan' => 'nullable|string',
         ]);
 
         Presensi::create([
-            'waktu_mulai' => $request->waktu_mulai,
-            'waktu_selesai' => $request->waktu_selesai,
+            'jenis' => $request->jenis,
+            'waktu' => $request->waktu,
             'keterangan' => $request->keterangan,
         ]);
 
         return redirect()->route('admin.presensi.view')->with('success', 'Presensi berhasil dibuat.');
     }
 
-    public function adminShowDetail($presensiId)
+    public function adminShowDetail($id)
     {
-        $presensi = Presensi::find($presensiId);
-        $absensis = Absensi::where('presensi_id', $presensiId)->get();
-        return view('admin.presensi.detail', compact('presensi', 'absensis'));
+        $presensi = Presensi::with('pengajuans.user')->findOrFail($id); // include user di eager load
+
+        return view('admin.presensi.detail', compact('presensi'));
     }
 
     public function adminHandleDelete(Presensi $presensi)
@@ -54,10 +54,7 @@ class PresensiController extends Controller
     {
         $user = auth()->user();
 
-        // Ambil semua presensi, urut terbaru dulu
         $presensis = Presensi::orderBy('waktu_mulai', 'desc')->get();
-
-        // Ambil data absensi user untuk presensi yang pernah dibuat
         $absensis = Absensi::where('user_id', $user->id)->get()->keyBy('presensi_id');
 
         return view('user.presensi.index', compact('presensis', 'absensis'));

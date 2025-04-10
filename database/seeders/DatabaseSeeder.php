@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             CutiSeeder::class,
-            PresensiSeeder::class
+            PresensiSeeder::class,
+            PengajuanPresensiSeeder::class,
         ]);
     }
 }

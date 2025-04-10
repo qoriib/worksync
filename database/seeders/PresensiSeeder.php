@@ -12,6 +12,13 @@ class PresensiSeeder extends Seeder
      */
     public function run(): void
     {
-        Presensi::factory()->count(5)->create();
+        $jenisList = ['absensi', 'terlambat', 'keluar'];
+
+        foreach ($jenisList as $jenis) {
+            Presensi::factory()
+                ->count(5)
+                ->state(['jenis' => $jenis])
+                ->create();
+        }
     }
 }

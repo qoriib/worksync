@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('presensis', function (Blueprint $table) {
             $table->id();
-            $table->datetime('waktu_mulai');
-            $table->datetime('waktu_selesai');
+            $table->enum('jenis', ['absensi', 'terlambat', 'keluar']);
+            $table->dateTime('waktu');
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });

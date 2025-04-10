@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h4 class="text-center mb-4">Riwayat Presensi</h4>
+    <h4 class="text-center mb-4">Riwayat Pengajuan Presensi</h4>
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -11,71 +11,76 @@
         </div>
     @endif
 
-    <div class="table-responsive">
-        <table class="table table-bordered align-middle">
-            <thead class="table-light text-center">
-                <tr>
-                    <th style="min-width: 10rem">Waktu Mulai</th>
-                    <th style="min-width: 10rem">Waktu Selesai</th>
-                    <th style="min-width: 15rem">Keterangan</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($presensis as $index => $presensi)
-                    @php
-                        $absen = $absensis[$presensi->id] ?? null;
-                        $status = $absen ? $absen->status : 'belum';
-                        $isActive = now()->between($presensi->waktu_mulai, $presensi->waktu_selesai);
-                        $now = now();
-                        $mulai = \Carbon\Carbon::parse($presensi->waktu_mulai);
-                        $selesai = \Carbon\Carbon::parse($presensi->waktu_selesai);
-                    @endphp
-                    <tr>
-                        <td>{{ \Carbon\Carbon::parse($presensi->waktu_mulai)->format('d M Y H:i') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($presensi->waktu_selesai)->format('d M Y H:i') }}</td>
-                        <td>{{ $presensi->keterangan ?? '-' }}</td>
-                        <td class="text-center">
-                            @if($absen)
-                                @if($absen->status === 'hadir')
-                                    @if($absen->waktu_mulai > $mulai)
-                                        <span class="badge bg-info">Terlambat</span>
-                                    @else
-                                        <span class="badge bg-success">Hadir</span>
-                                    @endif
-                                @elseif($absen->status === 'izin')
-                                    <span class="badge bg-warning">Izin</span>
-                                @endif
-                            @else
-                                @if($now->lt($mulai))
-                                    <span class="badge bg-secondary">Belum Dibuka</span>
-                                @elseif($now->between($mulai, $selesai))
-                                    <span class="badge bg-primary">Sedang Dibuka</span>
-                                @else
-                                    <span class="badge bg-danger">Tidak Presensi</span>
-                                @endif
-                            @endif
-                        </td>
-                        <td class="text-center text-nowrap">
-                            @if(!$absen && $isActive)
-                                <a class="btn btn-primary btn-sm" href="{{ route('user.presensi.form.view', $presensi->id)}}">Presensi</a>
-                            @elseif($absen && $absen->bukti)
-                                <a href="{{ asset('storage/' . $absen->bukti) }}" target="_blank" class="btn btn-outline-secondary btn-sm">Lihat Bukti</a>
-                            @else
-                                <span class="text-muted">-</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
+    @php
+        $grouped = $presensis->groupBy('jenis');
+    @endphp
 
-                @if($presensis->isEmpty())
-                    <tr>
-                        <td colspan="5" class="text-center">Tidak ada data presensi</td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
+    <div class="vstack gap-3">
+        @forelse($grouped as $jenis => $items)
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th class="table-secondary text-capitalize" colspan="6">{{ $jenis }}</th>
+                        </tr>
+                        <tr>
+                            <th style="min-width: 10rem">Waktu</th>
+                            <th style="min-width: 15rem">Alasan</th>
+                            <th>Status</th>
+                            <th style="min-width: 10rem">Durasi (menit)</th>
+                            <th>Bukti</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($items as $presensi)
+                            @php
+                                $pengajuan = $pengajuans[$presensi->id] ?? null;
+                                $durasi = $pengajuan 
+                                    ? \Carbon\Carbon::parse($presensi->waktu)->diffInMinutes($pengajuan->created_at)
+                                    : null;
+                            @endphp
+                            <tr>
+                                <td class="text-center">{{ \Carbon\Carbon::parse($presensi->waktu)->format('d M Y H:i') }}</td>
+                                <td>{{ $pengajuan?->alasan ?? '-' }}</td>
+                                <td class="text-center">
+                                    @if($pengajuan)
+                                        <span class="badge bg-{{ match($pengajuan->status) {
+                                            'approved' => 'success',
+                                            'rejected' => 'danger',
+                                            default => 'warning'
+                                        } }}">
+                                            {{ ucfirst($pengajuan->status) }}
+                                        </span>
+                                    @else
+                                        <span class="badge bg-secondary">Belum Mengajukan</span>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if($durasi !== null)
+                                        {{ round($durasi) }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td class="text-center text-nowrap">
+                                    @if($pengajuan)
+                                        @if($pengajuan->bukti)
+                                            <a href="{{ asset('storage/' . $pengajuan->bukti) }}" target="_blank" class="btn btn-outline-secondary btn-sm">Lihat</a>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    @else
+                                        <a href="{{ route('user.presensi.form.view', $presensi->id) }}" class="btn btn-sm btn-primary">Ajukan</a>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @empty
+            <div class="alert alert-warning text-center">Tidak ada data pengajuan presensi.</div>
+        @endforelse
     </div>
 </div>
 @endsection

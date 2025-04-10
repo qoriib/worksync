@@ -14,12 +14,9 @@ class PresensiFactory extends Factory
 
     public function definition(): array
     {
-        $waktuMulai = $this->faker->dateTimeBetween('-1 week', '+1 week');
-        $waktuSelesai = (clone $waktuMulai)->modify('+8 hours');
-
         return [
-            'waktu_mulai' => $waktuMulai,
-            'waktu_selesai' => $waktuSelesai,
+            'jenis' => $this->faker->randomElement(['absensi', 'terlambat', 'keluar']),
+            'waktu' => $this->faker->dateTimeBetween('-5 hours', 'now'),
             'keterangan' => $this->faker->optional()->sentence(),
         ];
     }
