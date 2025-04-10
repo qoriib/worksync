@@ -14,16 +14,42 @@ class Cuti extends Model
         'tanggal_mulai',
         'tanggal_selesai',
         'alasan',
-        'status',
     ];
 
-    protected $casts = [
-        'tanggal_mulai' => 'date',
-        'tanggal_selesai' => 'date',
+    protected $dates = [
+        'tanggal_mulai',
+        'tanggal_selesai',
     ];
 
+    // Relasi ke user yang mengajukan cuti
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Relasi ke semua approval dari admin
+    public function approvals()
+    {
+        return $this->hasMany(CutiApproval::class);
+    }
+
+    public function getStatusAttribute()
+    {
+        if ($this->approvals()->where('status', 'rejected')->exists()) {
+            return 'rejected';
+        }
+
+        if ($this->approvals()->where('status', 'pending')->exists()) {
+            return 'pending';
+        }
+
+        return 'approved';
+    }
+
+    public function scopePendingForAdmin($query, $adminId)
+    {
+        return $query->whereHas('approvals', function ($q) use ($adminId) {
+            $q->where('user_id', $adminId)->where('status', 'pending');
+        });
     }
 }

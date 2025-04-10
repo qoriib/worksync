@@ -32,7 +32,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::patch('/presensi/reject/{pengajuan}', [PengajuanPresensiController::class, 'adminHandleReject'])->name('admin.pengajuan_presensi.reject.handle');
 
     Route::get('cuti', [CutiController::class, 'adminShowList'])->name('admin.cuti.view');
-    Route::post('cuti/{id}/{status}', [CutiController::class, 'adminHandleApproval'])->name('admin.cuti.approval');
+    Route::post('cuti/{id}', [CutiController::class, 'adminHandleApproval'])->name('admin.cuti.approval');
 });
 
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {

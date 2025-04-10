@@ -23,7 +23,6 @@ class CutiFactory extends Factory
             'tanggal_mulai' => $startDate->format('Y-m-d'),
             'tanggal_selesai' => $endDate->format('Y-m-d'),
             'alasan' => $this->faker->sentence(),
-            'status' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
         ];
     }
 }
