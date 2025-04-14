@@ -3,7 +3,6 @@
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CutiController;
-use App\Http\Controllers\PengajuanPresensiController;
 use App\Http\Controllers\PresensiController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -23,13 +22,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/karyawan/{id}', [KaryawanController::class, 'adminHandleDelete'])->name('admin.karyawan.delete.handle');
 
     Route::get('/presensi', [PresensiController::class, 'adminShowList'])->name('admin.presensi.view');
-    Route::get('/presensi/create', [PresensiController::class, 'adminShowCreate'])->name('admin.presensi.create.view');
-    Route::post('/presensi/create', [PresensiController::class, 'adminHandleCreate'])->name('admin.presensi.create.handle');
-    Route::get('/presensi/detail/{id}', [PresensiController::class, 'adminShowDetail'])->name('admin.presensi.detail.view');
-    Route::delete('/presensi/delete/{presensi}', [PresensiController::class, 'adminHandleDelete'])->name('admin.presensi.delete.handle');
-
-    Route::patch('/presensi/approve/{pengajuan}', [PengajuanPresensiController::class, 'adminHandleApprove'])->name('admin.pengajuan_presensi.approve.handle');
-    Route::patch('/presensi/reject/{pengajuan}', [PengajuanPresensiController::class, 'adminHandleReject'])->name('admin.pengajuan_presensi.reject.handle');
+    Route::post('/presensi/approval/{pengajuan}', [PresensiController::class, 'adminHandleApproval'])->name('admin.presensi.approval.handle');
+    Route::get('/presensi/print/{jenis}', [PresensiController::class, 'adminPrint'])->name('admin.presensi.print');
 
     Route::get('cuti', [CutiController::class, 'adminShowList'])->name('admin.cuti.view');
     Route::post('cuti/{id}', [CutiController::class, 'adminHandleApproval'])->name('admin.cuti.approval');
@@ -40,9 +34,9 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/profile/edit', [KaryawanController::class, 'userShowProfileEdit'])->name('user.profile.edit.view');
     Route::put('/profile/update', [KaryawanController::class, 'userHandleProfileEdit'])->name('user.profile.edit.handle');
 
-    Route::get('/presensi', [PengajuanPresensiController::class, 'userShowList'])->name('user.presensi.view');
-    Route::get('/presensi/{id}', [PengajuanPresensiController::class, 'userShowForm'])->name('user.presensi.form.view');
-    Route::post('/presensi/{id}', [PengajuanPresensiController::class, 'userHandleForm'])->name('user.presensi.form.handle');
+    Route::get('/presensi', [PresensiController::class, 'userShowList'])->name('user.presensi.view');
+    Route::get('/presensi/pengajuan', [PresensiController::class, 'userShowForm'])->name('user.presensi.form.view');
+    Route::post('/presensi/pengajuan', [PresensiController::class, 'userHandleForm'])->name('user.presensi.form.handle');
 
     Route::get('/cuti', [CutiController::class, 'userShowList'])->name('user.cuti.view');
     Route::post('/cuti/submit', [CutiController::class, 'userHandleSubmit'])->name('user.cuti.handle');

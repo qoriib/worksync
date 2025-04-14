@@ -13,9 +13,14 @@ return new class extends Migration
     {
         Schema::create('presensis', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('jenis', ['absensi', 'terlambat', 'keluar']);
-            $table->dateTime('waktu');
-            $table->string('keterangan')->nullable();
+            $table->dateTime('waktu')->nullable();
+            $table->text('alasan')->nullable();
+            $table->string('bukti')->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected'])->nullable();
+            $table->dateTime('waktu_mulai')->nullable();
+            $table->dateTime('waktu_selesai')->nullable();
             $table->timestamps();
         });
     }

@@ -10,23 +10,24 @@ class Presensi extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'jenis',
         'waktu',
-        'keterangan',
+        'alasan',
+        'bukti',
+        'status',
+        'waktu_mulai',
+        'waktu_selesai',
     ];
 
     protected $casts = [
         'waktu' => 'datetime',
+        'waktu_mulai' => 'datetime', // Menambahkan waktu_mulai
+        'waktu_selesai' => 'datetime', // Menambahkan waktu_selesai
     ];
 
-    public function pengajuans()
+    public function user()
     {
-        return $this->hasMany(PengajuanPresensi::class);
-    }
-
-    public function getKeterlambatanMenitAttribute()
-    {
-        $jamMasuk = now()->setTime(8, 0); // default jam masuk
-        return max(0, $this->waktu->diffInMinutes($jamMasuk));
+        return $this->belongsTo(User::class);
     }
 }

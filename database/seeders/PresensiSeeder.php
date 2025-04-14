@@ -16,7 +16,7 @@ class PresensiSeeder extends Seeder
 
         foreach ($jenisList as $jenis) {
             Presensi::factory()
-                ->count(5)
+                ->count(20)
                 ->state(['jenis' => $jenis])
                 ->create();
         }

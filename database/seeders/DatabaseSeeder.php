@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CutiSeeder::class,
             PresensiSeeder::class,
-            PengajuanPresensiSeeder::class,
         ]);
     }
 }
