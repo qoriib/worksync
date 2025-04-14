@@ -75,6 +75,7 @@ class KaryawanController extends Controller
     {
         $data = $request->validate([
             'jabatan' => 'nullable|string|max:255',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'nama_panggilan' => 'nullable|string|max:255',
             'tempat_lahir' => 'nullable|string|max:255',
             'tanggal_lahir' => 'nullable|date',
@@ -97,6 +98,12 @@ class KaryawanController extends Controller
         ]);
 
         $karyawan = Auth::user()->karyawan;
+
+        if ($request->hasFile('foto_profil')) {
+            $path = $request->file('foto_profil')->store('foto_karyawan', 'public');
+            $data['foto_profil'] = $path;
+        }
+
         $karyawan->update($data);
 
         return redirect()->route('user.profile.view')->with('success', 'Data diri berhasil diperbarui.');

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('karyawans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('foto_profil')->nullable();
             $table->string('jabatan');
             $table->string('nama_panggilan')->nullable();
             $table->string('tempat_lahir')->nullable();

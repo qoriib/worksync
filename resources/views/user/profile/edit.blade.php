@@ -3,12 +3,41 @@
 @section('content')
     <h4 class="text-center mb-4">Sesuaikan Profil Saya</h4>
 
-    <form action="{{ route('user.profile.edit.handle') }}" method="POST">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Terjadi kesalahan:</strong>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('user.profile.edit.handle') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
         <div class="row">
-            <div class="col">
+            <div class="col-md-3">
+                <div class="card text-center mb-3">
+                    <div class="card-body">
+                        @if ($karyawan->foto_profil)
+                            <img src="{{ asset('storage/' . $karyawan->foto_profil) }}" 
+                                 alt="Foto Profil" 
+                                 class="img-fluid rounded-circle mb-3" 
+                                 style="max-width: 150px; height: auto;">
+                        @else
+                            <div class="text-muted mb-3">Belum ada foto profil</div>
+                        @endif
+                        <div>
+                            <label for="foto_profil" class="form-label">Ganti Foto Profil</label>
+                            <input type="file" class="form-control" id="foto_profil" name="foto_profil" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
                 <div class="card mb-3">
                     <div class="card-header fw-bold">Informasi Umum</div>
                     <div class="card-body">

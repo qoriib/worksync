@@ -20,7 +20,14 @@
 
         th, td {
             padding: 8px;
+        }
+
+        th {
             text-align: center;
+        }
+
+        td {
+            text-align: left;
         }
 
         h2 {

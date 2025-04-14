@@ -11,7 +11,23 @@
     @endif
 
     <div class="row">
-        <div class="col">
+        <div class="col-md-3">
+            <div class="card text-center mb-3">
+                <div class="card-body">
+                    @if ($karyawan->foto_profil)
+                        <img src="{{ asset('storage/' . $karyawan->foto_profil) }}"
+                             alt="Foto Profil"
+                             class="img-fluid rounded-circle mb-3"
+                             style="max-width: 200px; height: auto;">
+                    @else
+                        <div class="text-muted">Belum ada foto profil</div>
+                    @endif
+                    <h5 class="mt-2">{{ $karyawan->user->name }}</h5>
+                    <p class="mb-0">{{ $karyawan->jabatan }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
             <div class="card mb-3">
                 <div class="card-header fw-bold">Informasi Umum</div>
                 <div class="card-body">
