@@ -59,6 +59,12 @@ class KaryawanController extends Controller
         return redirect()->route('admin.karyawan.view')->with('success', 'Karyawan berhasil dihapus.');
     }
 
+    public function adminPrint($id)
+    {
+        $karyawan = Karyawan::with('user')->findOrFail($id);
+        return view('admin.karyawan.print', compact('karyawan'));
+    }
+
     public function userShowProfile()
     {
         $karyawan = Auth::user()->karyawan;
@@ -107,5 +113,11 @@ class KaryawanController extends Controller
         $karyawan->update($data);
 
         return redirect()->route('user.profile.view')->with('success', 'Data diri berhasil diperbarui.');
+    }
+
+    public function userPrint()
+    {
+        $karyawan = Auth::user()->karyawan;
+        return view('user.profile.print', compact('karyawan'));
     }
 }

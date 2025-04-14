@@ -5,49 +5,44 @@
     <title>WorkSync</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #333;
         }
-
+        h1, h2 {
+            text-align: center;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-
         table, th, td {
-            border: 1px solid black;
+            border: 1px solid #000;
         }
-
         th, td {
             padding: 8px;
         }
-
         th {
             text-align: center;
         }
-
         td {
             text-align: left;
         }
-
-        h2 {
+        .header, .footer {
             text-align: center;
-            margin-bottom: 20px;
+            font-size: 12px;
         }
-
-        @media print {
-            /* Hides elements that are not needed in print */
-            .no-print {
-                display: none;
-            }
-
-            body {
-                font-size: 12px;
-            }
-
-            table th, table td {
-                font-size: 12px;
-            }
+        .no-print {
+            display: none;
+        }
+        .profile-photo {
+            display: block;
+            margin: 0 auto;
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
         }
     </style>
 </head>

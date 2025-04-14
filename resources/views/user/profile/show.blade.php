@@ -161,8 +161,8 @@
             </div>
         </div>
     </div>
-
-    <div class="vstack align-items-center">
-        <a href="{{ route('user.profile.edit.view') }}" class="btn btn-primary mt-3">Ubah Profil</a>
+    <div class="hstack justify-content-center gap-2">
+        <a href="{{ route('user.profile.edit.view') }}" class="btn btn-primary">Ubah Profil</a>
+        <a href="{{ route('user.profile.print') }}" class="btn btn-info">Print</a>
     </div>
 @endsection

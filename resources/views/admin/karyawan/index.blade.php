@@ -31,6 +31,7 @@
                         <td>{{ $karyawan->jabatan }}</td>
                         <td class="d-flex gap-1">
                             <a href="{{ route('admin.karyawan.detail.view', $karyawan->id) }}" class="btn btn-sm btn-primary">Detail</a>
+                            <a href="{{ route('admin.karyawan.print', $karyawan->id) }}" class="btn btn-sm btn-info">Print</a>
                             <form action="{{ route('admin.karyawan.delete.handle', $karyawan->user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                 @csrf
                                 @method('DELETE')
