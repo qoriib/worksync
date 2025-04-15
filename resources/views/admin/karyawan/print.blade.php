@@ -108,5 +108,107 @@
                 <td>{{ $karyawan->darurat_alamat ?? '-' }}</td>
             </tr>
         </table>
+        <h3>Keluarga Lingkungan</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Hubungan</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Umur</th>
+                    <th>Pendidikan</th>
+                    <th>Profesi</th>
+                    <th>Telepon</th>
+                    <th>Alamat</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($karyawan->keluargaLingkungan as $kel)
+                    <tr>
+                        <td>{{ $kel->nama }}</td>
+                        <td>{{ $kel->hubungan }}</td>
+                        <td>{{ $kel->jenis_kelamin }}</td>
+                        <td>{{ $kel->umur }}</td>
+                        <td>{{ $kel->pendidikan }}</td>
+                        <td>{{ $kel->profesi }}</td>
+                        <td>{{ $kel->telepon }}</td>
+                        <td>{{ $kel->alamat }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="8">Tidak ada data.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+        <h3>Pengalaman Kerja</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama Perusahaan</th>
+                    <th>Jabatan</th>
+                    <th>Periode</th>
+                    <th>Gaji</th>
+                    <th>Alasan Keluar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($karyawan->pengalamanKerja as $exp)
+                    <tr>
+                        <td>{{ $exp->nama_perusahaan }}</td>
+                        <td>{{ $exp->jabatan }}</td>
+                        <td>{{ $exp->mulai_bulan }} {{ $exp->mulai_tahun }} - {{ $exp->sampai_bulan }} {{ $exp->sampai_tahun }}</td>
+                        <td>{{ $exp->gaji }}</td>
+                        <td>{{ $exp->alasan_keluar }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="5">Tidak ada data.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+        <h3>Referensi</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Hubungan</th>
+                    <th>Alamat</th>
+                    <th>Telepon</th>
+                    <th>Profesi</th>
+                    <th>Jabatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($karyawan->referensi as $ref)
+                    <tr>
+                        <td>{{ $ref->nama }}</td>
+                        <td>{{ $ref->hubungan }}</td>
+                        <td>{{ $ref->alamat }}</td>
+                        <td>{{ $ref->telepon }}</td>
+                        <td>{{ $ref->profesi }}</td>
+                        <td>{{ $ref->jabatan }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="6">Tidak ada data.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+        <h3>Dokumen Pendukung</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama Dokumen</th>
+                    <th>File</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($karyawan->dokumenPendukung as $dok)
+                    <tr>
+                        <td>{{ $dok->nama_dokumen }}</td>
+                        <td><a href="{{ asset('storage/' . $dok->file_path) }}" target="_blank">Lihat File</a></td>
+                    </tr>
+                @empty
+                    <tr><td colspan="2">Tidak ada dokumen.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 @endsection

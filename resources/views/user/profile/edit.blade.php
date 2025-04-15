@@ -344,9 +344,6 @@
                                     <div class="col-md-6">
                                         <label class="form-label">File</label>
                                         <input type="file" name="dokumen[file_path][]" class="form-control">
-                                        @if(isset($dok['file_path']))
-                                            <a href="{{ asset('storage/' . $dok['file_path']) }}" target="_blank" class="d-block mt-1">Lihat file lama</a>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
