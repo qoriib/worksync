@@ -67,13 +67,25 @@ class KaryawanController extends Controller
 
     public function userShowProfile()
     {
-        $karyawan = Auth::user()->karyawan;
+        $karyawan = Auth::user()->karyawan()->with([
+            'keluargaLingkungan',
+            'pengalamanKerja',
+            'referensi',
+            'dokumenPendukung'
+        ])->first();
+
         return view('user.profile.show', compact('karyawan'));
     }
 
     public function userShowProfileEdit()
     {
-        $karyawan = Auth::user()->karyawan;
+        $karyawan = Auth::user()->karyawan()->with([
+            'keluargaLingkungan',
+            'pengalamanKerja',
+            'referensi',
+            'dokumenPendukung'
+        ])->first();
+
         return view('user.profile.edit', compact('karyawan'));
     }
 
@@ -111,6 +123,105 @@ class KaryawanController extends Controller
         }
 
         $karyawan->update($data);
+
+        if ($request->has('keluarga')) {
+            $data = $request->input('keluarga');
+            $total = count($data['nama'] ?? []);
+
+            $karyawan->keluargaLingkungan()->delete();
+
+            for ($i = 0; $i < $total; $i++) {
+                $karyawan->keluargaLingkungan()->create([
+                    'nama' => $data['nama'][$i],
+                    'hubungan' => $data['hubungan'][$i],
+                    'jenis_kelamin' => $data['jenis_kelamin'][$i],
+                    'umur' => $data['umur'][$i],
+                    'pendidikan' => $data['pendidikan'][$i],
+                    'alamat' => $data['alamat'][$i],
+                    'profesi' => $data['profesi'][$i],
+                    'telepon' => $data['telepon'][$i],
+                ]);
+            }
+        }
+
+        if ($request->has('pengalaman')) {
+            $data = $request->input('pengalaman');
+            $total = count($data['nama_perusahaan'] ?? []);
+
+            $karyawan->pengalamanKerja()->delete();
+
+            for ($i = 0; $i < $total; $i++) {
+                $karyawan->pengalamanKerja()->create([
+                    'nama_perusahaan' => $data['nama_perusahaan'][$i],
+                    'jabatan' => $data['jabatan'][$i],
+                    'mulai_bulan' => $data['mulai_bulan'][$i],
+                    'mulai_tahun' => $data['mulai_tahun'][$i],
+                    'sampai_bulan' => $data['sampai_bulan'][$i],
+                    'sampai_tahun' => $data['sampai_tahun'][$i],
+                    'gaji' => $data['gaji'][$i],
+                    'alasan_keluar' => $data['alasan_keluar'][$i],
+                ]);
+            }
+        }
+
+        if ($request->has('referensi')) {
+            $data = $request->input('referensi');
+            $total = count($data['nama'] ?? []);
+
+            $karyawan->referensi()->delete();
+
+            for ($i = 0; $i < $total; $i++) {
+                $karyawan->referensi()->create([
+                    'nama' => $data['nama'][$i],
+                    'hubungan' => $data['hubungan'][$i],
+                    'alamat' => $data['alamat'][$i],
+                    'telepon' => $data['telepon'][$i],
+                    'profesi' => $data['profesi'][$i],
+                    'jabatan' => $data['jabatan'][$i],
+                ]);
+            }
+        }
+
+        if ($request->has('dokumen')) {
+            $data = $request->input('dokumen');
+            $files = $request->file('dokumen.file_path', []);
+            $total = count($data['nama_dokumen'] ?? []);
+
+            for ($i = 0; $i < $total; $i++) {
+                $dokumenId = $data['id'][$i] ?? null;
+                $uploadedFile = $files[$i] ?? null;
+                $namaDokumen = $data['nama_dokumen'][$i] ?? null;
+
+                // Jika ID tersedia, berarti update
+                if ($dokumenId) {
+                    $dokumen = $karyawan->dokumenPendukung()->find($dokumenId);
+
+                    if ($dokumen) {
+                        $updateData = ['nama_dokumen' => $namaDokumen];
+
+                        // Jika ada file baru, update path-nya
+                        if ($uploadedFile) {
+                            $filePath = $uploadedFile->store('dokumen_pendukung', 'public');
+                            $updateData['file_path'] = $filePath;
+                        }
+
+                        $dokumen->update($updateData);
+                    }
+                } else {
+                    // Tambah data baru, file wajib
+                    if (!$uploadedFile || !$namaDokumen) {
+                        continue;
+                    }
+
+                    $filePath = $uploadedFile->store('dokumen_pendukung', 'public');
+
+                    $karyawan->dokumenPendukung()->create([
+                        'nama_dokumen' => $namaDokumen,
+                        'file_path' => $filePath,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('user.profile.view')->with('success', 'Data diri berhasil diperbarui.');
     }

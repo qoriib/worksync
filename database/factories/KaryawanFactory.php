@@ -2,7 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\DokumenPendukung;
 use App\Models\Karyawan;
+use App\Models\KeluargaLingkungan;
+use App\Models\PengalamanKerja;
+use App\Models\Referensi;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -38,5 +42,15 @@ class KaryawanFactory extends Factory
             'darurat_telepon' => $this->faker->phoneNumber(),
             'darurat_alamat' => $this->faker->address(),
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Karyawan $karyawan) {
+            KeluargaLingkungan::factory(3)->create(['karyawan_id' => $karyawan->id]);
+            PengalamanKerja::factory(2)->create(['karyawan_id' => $karyawan->id]);
+            Referensi::factory(2)->create(['karyawan_id' => $karyawan->id]);
+            DokumenPendukung::factory(2)->create(['karyawan_id' => $karyawan->id]);
+        });
     }
 }

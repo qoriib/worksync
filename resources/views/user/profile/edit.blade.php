@@ -139,7 +139,8 @@
                             <input type="text" class="form-control" id="no_hp" name="no_hp" value="{{ old('no_hp', $karyawan->no_hp) }}">
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="tinggal_dengan_keluarga" id="tinggal_dengan_keluarga" {{ old('tinggal_dengan_keluarga', $karyawan->tinggal_dengan_keluarga) ? 'checked' : '' }}>
+                            <input type="hidden" name="tinggal_dengan_keluarga" value="0">
+                            <input class="form-check-input" type="checkbox" name="tinggal_dengan_keluarga" id="tinggal_dengan_keluarga" value="1" {{ old('tinggal_dengan_keluarga', $karyawan->tinggal_dengan_keluarga) ? 'checked' : '' }}>
                             <label class="form-check-label" for="tinggal_dengan_keluarga">Tinggal dengan Keluarga</label>
                         </div>
                     </div>
@@ -167,6 +168,193 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <div class="card mb-3">
+                    <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+                        Keluarga Lingkungan
+                        <button type="button" class="btn btn-sm btn-success" id="addKeluargaBtn">Tambah</button>
+                    </div>
+                    <div class="card-body" id="keluargaWrapper">
+                        @php
+                            $keluargas = old('keluarga', $karyawan->keluargaLingkungan->toArray() ?? []);
+                        @endphp
+                
+                        @foreach($keluargas as $i => $kel)
+                            <div class="keluarga-item border rounded p-3 mb-3 position-relative">
+                                <button type="button" class="btn-close position-absolute top-0 end-0 p-2 removeKeluargaBtn" aria-label="Close"></button>
+                
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama</label>
+                                        <input type="text" name="keluarga[nama][]" class="form-control" value="{{ $kel['nama'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Hubungan</label>
+                                        <input type="text" name="keluarga[hubungan][]" class="form-control" value="{{ $kel['hubungan'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Jenis Kelamin</label>
+                                        <select name="keluarga[jenis_kelamin][]" class="form-select">
+                                            <option value="">-- Pilih --</option>
+                                            <option value="Laki-laki" {{ ($kel['jenis_kelamin'] ?? '') === 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                            <option value="Perempuan" {{ ($kel['jenis_kelamin'] ?? '') === 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Umur</label>
+                                        <input type="text" name="keluarga[umur][]" class="form-control" value="{{ $kel['umur'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Pendidikan</label>
+                                        <input type="text" name="keluarga[pendidikan][]" class="form-control" value="{{ $kel['pendidikan'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Profesi</label>
+                                        <input type="text" name="keluarga[profesi][]" class="form-control" value="{{ $kel['profesi'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Telepon</label>
+                                        <input type="text" name="keluarga[telepon][]" class="form-control" value="{{ $kel['telepon'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Alamat</label>
+                                        <textarea name="keluarga[alamat][]" class="form-control">{{ $kel['alamat'] ?? '' }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+                        Pengalaman Kerja
+                        <button type="button" class="btn btn-sm btn-success" id="addPengalamanBtn">Tambah</button>
+                    </div>
+                    <div class="card-body" id="pengalamanWrapper">
+                        @php
+                            $pengalamans = old('pengalaman', $karyawan->pengalamanKerja->toArray() ?? []);
+                        @endphp
+                
+                        @foreach ($pengalamans as $i => $peng)
+                            <div class="pengalaman-item border rounded p-3 mb-3 position-relative">
+                                <button type="button" class="btn-close position-absolute top-0 end-0 p-2 removePengalamanBtn" aria-label="Close"></button>
+                
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama Perusahaan</label>
+                                        <input type="text" name="pengalaman[nama_perusahaan][]" class="form-control" value="{{ $peng['nama_perusahaan'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Jabatan</label>
+                                        <input type="text" name="pengalaman[jabatan][]" class="form-control" value="{{ $peng['jabatan'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Mulai Bulan</label>
+                                        <input type="text" name="pengalaman[mulai_bulan][]" class="form-control" value="{{ $peng['mulai_bulan'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Mulai Tahun</label>
+                                        <input type="text" name="pengalaman[mulai_tahun][]" class="form-control" value="{{ $peng['mulai_tahun'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Sampai Bulan</label>
+                                        <input type="text" name="pengalaman[sampai_bulan][]" class="form-control" value="{{ $peng['sampai_bulan'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Sampai Tahun</label>
+                                        <input type="text" name="pengalaman[sampai_tahun][]" class="form-control" value="{{ $peng['sampai_tahun'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Gaji</label>
+                                        <input type="text" name="pengalaman[gaji][]" class="form-control" value="{{ $peng['gaji'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Alasan Keluar</label>
+                                        <textarea name="pengalaman[alasan_keluar][]" class="form-control">{{ $peng['alasan_keluar'] ?? '' }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+                        Referensi
+                        <button type="button" class="btn btn-sm btn-success" id="addReferensiBtn">Tambah</button>
+                    </div>
+                    <div class="card-body" id="referensiWrapper">
+                        @php
+                            $referensis = old('referensi', $karyawan->referensi->toArray() ?? []);
+                        @endphp
+                
+                        @foreach($referensis as $i => $ref)
+                            <div class="referensi-item border rounded p-3 mb-3 position-relative">
+                                <button type="button" class="btn-close position-absolute top-0 end-0 p-2 removeReferensiBtn" aria-label="Close"></button>
+                
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama</label>
+                                        <input type="text" name="referensi[nama][]" class="form-control" value="{{ $ref['nama'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Hubungan</label>
+                                        <input type="text" name="referensi[hubungan][]" class="form-control" value="{{ $ref['hubungan'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Alamat</label>
+                                        <input type="text" name="referensi[alamat][]" class="form-control" value="{{ $ref['alamat'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Telepon</label>
+                                        <input type="text" name="referensi[telepon][]" class="form-control" value="{{ $ref['telepon'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Profesi</label>
+                                        <input type="text" name="referensi[profesi][]" class="form-control" value="{{ $ref['profesi'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Jabatan</label>
+                                        <input type="text" name="referensi[jabatan][]" class="form-control" value="{{ $ref['jabatan'] ?? '' }}">
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+                        Dokumen Pendukung
+                        <button type="button" class="btn btn-sm btn-success" id="addDokumenBtn">Tambah</button>
+                    </div>
+                    <div class="card-body" id="dokumenWrapper">
+                        @php
+                            $dokumens = old('dokumen', $karyawan->dokumenPendukung->toArray() ?? []);
+                        @endphp
+                
+                        @foreach($dokumens as $i => $dok)
+                            <div class="dokumen-item border rounded p-3 mb-3 position-relative">
+                                <button type="button" class="btn-close position-absolute top-0 end-0 p-2 removeDokumenBtn" aria-label="Close"></button>
+                
+                                <div class="row g-2 align-items-end">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama Dokumen</label>
+                                        <input type="text" name="dokumen[nama_dokumen][]" class="form-control" value="{{ $dok['nama_dokumen'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">File</label>
+                                        <input type="file" name="dokumen[file_path][]" class="form-control">
+                                        @if(isset($dok['file_path']))
+                                            <a href="{{ asset('storage/' . $dok['file_path']) }}" target="_blank" class="d-block mt-1">Lihat file lama</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="hstack gap-2">
             <button type="submit" class="btn btn-success">Simpan Perubahan</button>
@@ -174,3 +362,169 @@
         </div>
     </form>
 @endsection
+
+@push('scripts')
+<script>
+    document.getElementById('addKeluargaBtn').addEventListener('click', function () {
+        const wrapper = document.getElementById('keluargaWrapper');
+
+        const item = document.createElement('div');
+        item.classList.add('keluarga-item', 'border', 'rounded', 'p-3', 'mb-3', 'position-relative');
+        item.innerHTML = `
+            <button type="button" class="btn-close position-absolute top-0 end-0 removeKeluargaBtn" aria-label="Close"></button>
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <label class="form-label">Nama</label>
+                    <input type="text" name="keluarga[nama][]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Hubungan</label>
+                    <input type="text" name="keluarga[hubungan][]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Jenis Kelamin</label>
+                    <select name="keluarga[jenis_kelamin][]" class="form-select">
+                        <option value="">-- Pilih --</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Umur</label>
+                    <input type="text" name="keluarga[umur][]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Pendidikan</label>
+                    <input type="text" name="keluarga[pendidikan][]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Profesi</label>
+                    <input type="text" name="keluarga[profesi][]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Telepon</label>
+                    <input type="text" name="keluarga[telepon][]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Alamat</label>
+                    <textarea name="keluarga[alamat][]" class="form-control"></textarea>
+                </div>
+            </div>
+        `;
+        wrapper.appendChild(item);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('removeKeluargaBtn')) {
+            e.target.closest('.keluarga-item').remove();
+        }
+    });
+</script>
+@endpush
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const pengalamanWrapper = document.getElementById('pengalamanWrapper');
+        const addPengalamanBtn = document.getElementById('addPengalamanBtn');
+
+        addPengalamanBtn.addEventListener('click', () => {
+            const firstItem = pengalamanWrapper.querySelector('.pengalaman-item');
+            const clone = firstItem.cloneNode(true);
+            clone.querySelectorAll('input, textarea').forEach(el => el.value = '');
+            pengalamanWrapper.appendChild(clone);
+        });
+
+        pengalamanWrapper.addEventListener('click', function (e) {
+            if (e.target.classList.contains('removePengalamanBtn')) {
+                const item = e.target.closest('.pengalaman-item');
+                if (pengalamanWrapper.querySelectorAll('.pengalaman-item').length > 1) {
+                    item.remove();
+                }
+            }
+        });
+    });
+</script>
+@endpush
+
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const referensiWrapper = document.getElementById('referensiWrapper');
+        const addReferensiBtn = document.getElementById('addReferensiBtn');
+
+        addReferensiBtn.addEventListener('click', function () {
+            const item = document.createElement('div');
+            item.classList.add('referensi-item', 'border', 'rounded', 'p-3', 'mb-3', 'position-relative');
+            item.innerHTML = `
+                <button type="button" class="btn-close position-absolute top-0 end-0 p-2 removeReferensiBtn" aria-label="Close"></button>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Nama</label>
+                        <input type="text" name="referensi[nama][]" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Hubungan</label>
+                        <input type="text" name="referensi[hubungan][]" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Alamat</label>
+                        <input type="text" name="referensi[alamat][]" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Telepon</label>
+                        <input type="text" name="referensi[telepon][]" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Profesi</label>
+                        <input type="text" name="referensi[profesi][]" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Jabatan</label>
+                        <input type="text" name="referensi[jabatan][]" class="form-control">
+                    </div>
+                </div>
+            `;
+            referensiWrapper.appendChild(item);
+        });
+
+        referensiWrapper.addEventListener('click', function (e) {
+            if (e.target.classList.contains('removeReferensiBtn')) {
+                e.target.closest('.referensi-item').remove();
+            }
+        });
+    });
+</script>
+@endpush
+
+@push('scripts')
+<script>
+    document.getElementById('addDokumenBtn').addEventListener('click', function () {
+        const wrapper = document.getElementById('dokumenWrapper');
+
+        const item = document.createElement('div');
+        item.classList.add('dokumen-item', 'border', 'rounded', 'p-3', 'mb-3', 'position-relative');
+        item.innerHTML = `
+            <button type="button" class="btn-close position-absolute top-0 end-0 p-2 removeDokumenBtn" aria-label="Close"></button>
+            <div class="row g-2 align-items-end">
+                <div class="col-md-6">
+                    <label class="form-label">Nama Dokumen</label>
+                    <input type="text" name="dokumen[nama_dokumen][]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">File</label>
+                    <input type="file" name="dokumen[file_path][]" class="form-control">
+                </div>
+            </div>
+        `;
+
+        wrapper.appendChild(item);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('removeDokumenBtn')) {
+            e.target.closest('.dokumen-item').remove();
+        }
+    });
+</script>
+@endpush

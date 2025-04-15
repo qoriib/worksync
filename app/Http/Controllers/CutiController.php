@@ -12,7 +12,7 @@ class CutiController extends Controller
     // USER: Lihat daftar pengajuan cuti
     public function userShowList()
     {
-        $adminList = \App\Models\User::where('role', 'admin')->get();
+        $adminList = User::where('role', 'admin')->get();
 
         $cutis = Cuti::with('approvals') // untuk melihat status approval
             ->where('user_id', auth()->id())

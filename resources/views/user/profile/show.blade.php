@@ -161,6 +161,134 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <div class="card mb-3">
+                <div class="card-header fw-bold">Keluarga</div>
+                <div class="card-body">
+                    @if($karyawan->keluargaLingkungan->isNotEmpty())
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Hubungan</th>
+                                    <th>Nama</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Umur</th>
+                                    <th>Pendidikan</th>
+                                    <th>Alamat</th>
+                                    <th>Profesi</th>
+                                    <th>Telepon</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($karyawan->keluargaLingkungan as $keluarga)
+                                    <tr>
+                                        <td>{{ $keluarga->hubungan }}</td>
+                                        <td>{{ $keluarga->nama }}</td>
+                                        <td>{{ $keluarga->jenis_kelamin ?? '-' }}</td>
+                                        <td>{{ $keluarga->umur ?? '-' }}</td>
+                                        <td>{{ $keluarga->pendidikan ?? '-' }}</td>
+                                        <td>{{ $keluarga->alamat ?? '-' }}</td>
+                                        <td>{{ $keluarga->profesi ?? '-' }}</td>
+                                        <td>{{ $keluarga->telepon ?? '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="text-muted">Belum ada data keluarga</div>
+                    @endif
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header fw-bold">Pengalaman Kerja</div>
+                <div class="card-body">
+                    @if($karyawan->pengalamanKerja->isNotEmpty())
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Nama Perusahaan</th>
+                                    <th>Jabatan</th>
+                                    <th>Periode</th>
+                                    <th>Gaji</th>
+                                    <th>Alasan Keluar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($karyawan->pengalamanKerja as $pengalaman)
+                                    <tr>
+                                        <td>{{ $pengalaman->nama_perusahaan }}</td>
+                                        <td>{{ $pengalaman->jabatan }}</td>
+                                        <td>{{ $pengalaman->mulai_bulan }} {{ $pengalaman->mulai_tahun }} - {{ $pengalaman->sampai_bulan }} {{ $pengalaman->sampai_tahun }}</td>
+                                        <td>{{ $pengalaman->gaji ?? '-' }}</td>
+                                        <td>{{ $pengalaman->alasan_keluar ?? '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="text-muted">Belum ada data pengalaman kerja</div>
+                    @endif
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header fw-bold">Referensi</div>
+                <div class="card-body">
+                    @if($karyawan->referensi->isNotEmpty())
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Hubungan</th>
+                                    <th>Jabatan</th>
+                                    <th>Alamat</th>
+                                    <th>Telepon</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($karyawan->referensi as $referensi)
+                                    <tr>
+                                        <td>{{ $referensi->nama }}</td>
+                                        <td>{{ $referensi->hubungan }}</td>
+                                        <td>{{ $referensi->jabatan ?? '-' }}</td>
+                                        <td>{{ $referensi->alamat ?? '-' }}</td>
+                                        <td>{{ $referensi->telepon ?? '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="text-muted">Belum ada data referensi</div>
+                    @endif
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header fw-bold">Dokumen Pendukung</div>
+                <div class="card-body">
+                    @if($karyawan->dokumenPendukung->isNotEmpty())
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Nama Dokumen</th>
+                                    <th>Link</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($karyawan->dokumenPendukung as $dokumen)
+                                    <tr>
+                                        <td>{{ $dokumen->nama_dokumen }}</td>
+                                        <td><a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank">Lihat Dokumen</a></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="text-muted">Belum ada dokumen pendukung</div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="hstack justify-content-center gap-2">
         <a href="{{ route('user.profile.edit.view') }}" class="btn btn-primary">Ubah Profil</a>
         <a href="{{ route('user.profile.print') }}" class="btn btn-info">Print</a>
