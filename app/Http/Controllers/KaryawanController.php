@@ -51,45 +51,20 @@ class KaryawanController extends Controller
         return redirect()->route('admin.karyawan.view')->with('success', 'Karyawan berhasil dibuat.');
     }
 
-    public function adminHandleDelete($id)
+    public function adminShowEdit($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-
-        return redirect()->route('admin.karyawan.view')->with('success', 'Karyawan berhasil dihapus.');
-    }
-
-    public function adminPrint($id)
-    {
-        $karyawan = Karyawan::with('user')->findOrFail($id);
-        return view('admin.karyawan.print', compact('karyawan'));
-    }
-
-    public function userShowProfile()
-    {
-        $karyawan = Auth::user()->karyawan()->with([
+        $karyawan = Karyawan::findOrFail($id)->with([
+            'pendidikan',
             'keluargaLingkungan',
             'pengalamanKerja',
             'referensi',
             'dokumenPendukung'
         ])->first();
 
-        return view('user.profile.show', compact('karyawan'));
+        return view('admin.karyawan.edit', compact('karyawan'));
     }
 
-    public function userShowProfileEdit()
-    {
-        $karyawan = Auth::user()->karyawan()->with([
-            'keluargaLingkungan',
-            'pengalamanKerja',
-            'referensi',
-            'dokumenPendukung'
-        ])->first();
-
-        return view('user.profile.edit', compact('karyawan'));
-    }
-
-    public function userHandleProfileEdit(Request $request)
+    public function adminHandleEdit($id, Request $request)
     {
         $data = $request->validate([
             'jabatan' => 'nullable|string|max:255',
@@ -115,7 +90,7 @@ class KaryawanController extends Controller
             'darurat_alamat' => 'nullable|string',
         ]);
 
-        $karyawan = Auth::user()->karyawan;
+        $karyawan = Karyawan::findOrFail($id);
 
         if ($request->hasFile('foto_profil')) {
             $path = $request->file('foto_profil')->store('foto_karyawan', 'public');
@@ -123,6 +98,22 @@ class KaryawanController extends Controller
         }
 
         $karyawan->update($data);
+
+        if ($request->has('pendidikan')) {
+            $data = $request->input('pendidikan');
+            $total = count($data['tingkat_sekolah'] ?? []);
+
+            $karyawan->pendidikan()->delete();
+
+            for ($i = 0; $i < $total; $i++) {
+                $karyawan->pendidikan()->create([
+                    'tingkat_sekolah' => $data['tingkat_sekolah'][$i],
+                    'nama_sekolah' => $data['nama_sekolah'][$i],
+                    'tahun_ijazah' => $data['tahun_ijazah'][$i] ?? null,
+                    'jurusan' => $data['jurusan'][$i] ?? null,
+                ]);
+            }
+        }
 
         if ($request->has('keluarga')) {
             $data = $request->input('keluarga');
@@ -223,12 +214,39 @@ class KaryawanController extends Controller
             }
         }
 
-        return redirect()->route('user.profile.view')->with('success', 'Data diri berhasil diperbarui.');
+        return redirect()->route('admin.karyawan.edit.view', $karyawan->id)->with('success', 'Data diri berhasil diperbarui.');
+    }
+
+    public function adminHandleDelete($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.karyawan.view')->with('success', 'Karyawan berhasil dihapus.');
+    }
+
+    public function adminPrint($id)
+    {
+        $karyawan = Karyawan::with('user')->findOrFail($id);
+        return view('admin.karyawan.print', compact('karyawan'));
+    }
+
+    public function userShowProfile()
+    {
+        $karyawan = Auth::user()->karyawan()->with([
+            'keluargaLingkungan',
+            'pengalamanKerja',
+            'referensi',
+            'dokumenPendukung'
+        ])->first();
+
+        return view('user.profile.show', compact('karyawan'));
     }
 
     public function userPrint()
     {
         $karyawan = Auth::user()->karyawan;
+
         return view('user.profile.print', compact('karyawan'));
     }
 }

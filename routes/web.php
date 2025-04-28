@@ -19,9 +19,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/karyawan/detail/{id}', [KaryawanController::class, 'adminShowDetail'])->name('admin.karyawan.detail.view');
     Route::get('/karyawan/create', [KaryawanController::class, 'adminShowCreate'])->name('admin.karyawan.create.view');
     Route::post('/karyawan/create', [KaryawanController::class, 'adminHandleCreate'])->name('admin.karyawan.create.handle');
+    Route::get('/karyawan/edit/{id}', [KaryawanController::class, 'adminShowEdit'])->name('admin.karyawan.edit.view');
+    Route::put('/karyawan/edit/{id}', [KaryawanController::class, 'adminHandleEdit'])->name('admin.karyawan.edit.handle');
     Route::delete('/karyawan/{id}', [KaryawanController::class, 'adminHandleDelete'])->name('admin.karyawan.delete.handle');
-    Route::get('/karyawan/print/{id}', [KaryawanController::class, 'adminPrint'])->name('admin.karyawan.print');
 
+    Route::get('/karyawan/print/{id}', [KaryawanController::class, 'adminPrint'])->name('admin.karyawan.print');
     Route::get('/presensi', [PresensiController::class, 'adminShowList'])->name('admin.presensi.view');
     Route::post('/presensi/approval/{pengajuan}', [PresensiController::class, 'adminHandleApproval'])->name('admin.presensi.approval.handle');
     Route::get('/presensi/print/{jenis}', [PresensiController::class, 'adminPrint'])->name('admin.presensi.print');
@@ -32,8 +34,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/profile', [KaryawanController::class, 'userShowProfile'])->name('user.profile.view');
-    Route::get('/profile/edit', [KaryawanController::class, 'userShowProfileEdit'])->name('user.profile.edit.view');
-    Route::put('/profile/update', [KaryawanController::class, 'userHandleProfileEdit'])->name('user.profile.edit.handle');
     Route::get('/profile/print', [KaryawanController::class, 'userPrint'])->name('user.profile.print');
 
     Route::get('/presensi', [PresensiController::class, 'userShowList'])->name('user.presensi.view');

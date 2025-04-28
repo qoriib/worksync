@@ -1,7 +1,10 @@
 @extends('_layouts.app')
 
 @section('content')
-    <h4 class="text-center mb-4">Profil Saya</h4>
+    <div class="hstack justify-content-between gap-3 mb-4">
+        <h4 class="mb-0">Profil Saya</h4>
+        <a href="{{ route('user.profile.print') }}" class="btn btn-info">Print</a>
+    </div>
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -164,6 +167,41 @@
     <div class="row">
         <div class="col">
             <div class="card mb-3">
+                <div class="card-header fw-bold">Riwayat Pendidikan</div>
+                <div class="card-body">
+                    @if($karyawan->pendidikan->isNotEmpty())
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width: 12rem">Tingkat Sekolah</th>
+                                        <th style="min-width: 12rem">Nama Sekolah</th>
+                                        <th style="min-width: 7rem">Tahun Ijazah</th>
+                                        <th style="min-width: 10rem">Jurusan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($karyawan->pendidikan as $pendidikan)
+                                        <tr>
+                                            <td>{{ $pendidikan->tingkat_sekolah }}</td>
+                                            <td>{{ $pendidikan->nama_sekolah }}</td>
+                                            <td>{{ $pendidikan->tahun_ijazah }}</td>
+                                            <td>{{ $pendidikan->jurusan ?? '-' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="text-muted">Belum ada data pendidikan</div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card mb-3">
                 <div class="card-header fw-bold">Keluarga</div>
                 <div class="card-body">
                     @if($karyawan->keluargaLingkungan->isNotEmpty())
@@ -296,7 +334,5 @@
         </div>
     </div>
     <div class="hstack justify-content-center gap-2">
-        <a href="{{ route('user.profile.edit.view') }}" class="btn btn-primary">Ubah Profil</a>
-        <a href="{{ route('user.profile.print') }}" class="btn btn-info">Print</a>
     </div>
 @endsection

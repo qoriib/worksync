@@ -157,6 +157,41 @@
     <div class="row">
         <div class="col">
             <div class="card mb-3">
+                <div class="card-header fw-bold">Riwayat Pendidikan</div>
+                <div class="card-body">
+                    @if($karyawan->pendidikan->isNotEmpty())
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width: 12rem">Tingkat Sekolah</th>
+                                        <th style="min-width: 12rem">Nama Sekolah</th>
+                                        <th style="min-width: 7rem">Tahun Ijazah</th>
+                                        <th style="min-width: 10rem">Jurusan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($karyawan->pendidikan as $pendidikan)
+                                        <tr>
+                                            <td>{{ $pendidikan->tingkat_sekolah }}</td>
+                                            <td>{{ $pendidikan->nama_sekolah }}</td>
+                                            <td>{{ $pendidikan->tahun_ijazah }}</td>
+                                            <td>{{ $pendidikan->jurusan ?? '-' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="text-muted">Belum ada data pendidikan</div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card mb-3">
                 <div class="card-header fw-bold">Keluarga</div>
                 <div class="card-body">
                     @if($karyawan->keluargaLingkungan->isNotEmpty())

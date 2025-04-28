@@ -2,7 +2,9 @@
 
 @section('content')
     <div class="header">
-        <img src="{{ asset('storage/' . $karyawan->foto_profil) }}" alt="Foto Profil" class="profile-photo">
+        @if ($karyawan->foto_profil)
+            <img src="{{ asset('storage/' . $karyawan->foto_profil) }}" alt="Foto Profil" class="profile-photo">
+        @endif
         <h1>Profil Saya</h1>
         <h2>{{ $karyawan->user->name }}</h2>
     </div>
@@ -107,6 +109,29 @@
                 <th>Alamat</th>
                 <td>{{ $karyawan->darurat_alamat ?? '-' }}</td>
             </tr>
+        </table>
+        <h3>Pendidikan</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tingkat Sekolah</th>
+                    <th>Nama Sekolah</th>
+                    <th>Tahun Ijazah</th>
+                    <th>Jurusan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($karyawan->pendidikan as $pendidikan)
+                    <tr>
+                        <td>{{ $pendidikan->tingkat_sekolah }}</td>
+                        <td>{{ $pendidikan->nama_sekolah }}</td>
+                        <td>{{ $pendidikan->tahun_ijazah }}</td>
+                        <td>{{ $pendidikan->jurusan ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="4">Tidak ada data pendidikan.</td></tr>
+                @endforelse
+            </tbody>
         </table>
         <h3>Keluarga Lingkungan</h3>
         <table>

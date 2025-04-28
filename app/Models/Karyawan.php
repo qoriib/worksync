@@ -40,6 +40,11 @@ class Karyawan extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function pendidikan()
+    {
+        return $this->hasMany(Pendidikan::class);
+    }
+
     public function keluargaLingkungan()
     {
         return $this->hasMany(KeluargaLingkungan::class);

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\DokumenPendukung;
 use App\Models\Karyawan;
 use App\Models\KeluargaLingkungan;
+use App\Models\Pendidikan;
 use App\Models\PengalamanKerja;
 use App\Models\Referensi;
 use App\Models\User;
@@ -47,6 +48,7 @@ class KaryawanFactory extends Factory
     public function configure(): static
     {
         return $this->afterCreating(function (Karyawan $karyawan) {
+            Pendidikan::factory(3)->create(['karyawan_id' => $karyawan->id]);
             KeluargaLingkungan::factory(3)->create(['karyawan_id' => $karyawan->id]);
             PengalamanKerja::factory(2)->create(['karyawan_id' => $karyawan->id]);
             Referensi::factory(2)->create(['karyawan_id' => $karyawan->id]);

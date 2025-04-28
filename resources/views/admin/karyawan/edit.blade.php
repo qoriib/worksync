@@ -1,7 +1,7 @@
 @extends('_layouts.app')
 
 @section('content')
-    <h4 class="text-center mb-4">Sesuaikan Profil Saya</h4>
+    <h4 class="text-center mb-4">Sesuaikan Informasi Karyawan</h4>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('user.profile.edit.handle') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.karyawan.edit.handle', $karyawan->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -43,7 +43,7 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="name" class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name', auth()->user()->name) }}" disabled>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $karyawan->user->name) }}" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="jabatan" class="form-label">Jabatan</label>
@@ -170,6 +170,50 @@
         </div>
         <div class="row">
             <div class="col">
+                <div class="card mb-3">
+                    <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+                        Pendidikan
+                        <button type="button" class="btn btn-sm btn-success" id="addPendidikanBtn">Tambah</button>
+                    </div>
+                    <div class="card-body" id="pendidikanWrapper">
+                        @php
+                            $pendidikans = old('pendidikan', $karyawan->pendidikan->toArray() ?? []);
+                        @endphp
+                
+                        @foreach($pendidikans as $i => $pen)
+                            <div class="pendidikan-item border rounded p-3 mb-3 position-relative">
+                                <button type="button" class="btn-close position-absolute top-0 end-0 p-2 removePendidikanBtn" aria-label="Close"></button>
+                
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tingkat Sekolah</label>
+                                        <select name="pendidikan[tingkat_sekolah][]" class="form-select">
+                                            <option value="">-- Pilih --</option>
+                                            <option value="Dasar" {{ ($pen['tingkat_sekolah'] ?? '') === 'Dasar' ? 'selected' : '' }}>Dasar</option>
+                                            <option value="Lanjutan Pertama" {{ ($pen['tingkat_sekolah'] ?? '') === 'Lanjutan Pertama' ? 'selected' : '' }}>Lanjutan Pertama</option>
+                                            <option value="Lanjutan Atas" {{ ($pen['tingkat_sekolah'] ?? '') === 'Lanjutan Atas' ? 'selected' : '' }}>Lanjutan Atas</option>
+                                            <option value="Universitas" {{ ($pen['tingkat_sekolah'] ?? '') === 'Universitas' ? 'selected' : '' }}>Universitas</option>
+                                            <option value="Kursus" {{ ($pen['tingkat_sekolah'] ?? '') === 'Kursus' ? 'selected' : '' }}>Kursus</option>
+                                            <option value="Lainnya" {{ ($pen['tingkat_sekolah'] ?? '') === 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama Sekolah</label>
+                                        <input type="text" name="pendidikan[nama_sekolah][]" class="form-control" value="{{ $pen['nama_sekolah'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tahun Ijazah</label>
+                                        <input type="text" name="pendidikan[tahun_ijazah][]" class="form-control" value="{{ $pen['tahun_ijazah'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Jurusan</label>
+                                        <input type="text" name="pendidikan[jurusan][]" class="form-control" value="{{ $pen['jurusan'] ?? '' }}">
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
                 <div class="card mb-3">
                     <div class="card-header fw-bold d-flex justify-content-between align-items-center">
                         Keluarga Lingkungan
@@ -355,10 +399,58 @@
 
         <div class="hstack gap-2">
             <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-            <a href="{{ route('user.profile.view') }}" class="btn btn-secondary">Batal</a>
+            <a href="{{ route('admin.karyawan.view') }}" class="btn btn-secondary">Batal</a>
         </div>
     </form>
 @endsection
+
+@push('scripts')
+<script>
+    document.getElementById('addPendidikanBtn').addEventListener('click', function () {
+        const wrapper = document.getElementById('pendidikanWrapper');
+
+        const item = document.createElement('div');
+        item.classList.add('pendidikan-item', 'border', 'rounded', 'p-3', 'mb-3', 'position-relative');
+        item.innerHTML = `
+            <button type="button" class="btn-close position-absolute top-0 end-0 removePendidikanBtn" aria-label="Close"></button>
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <label class="form-label">Tingkat Sekolah</label>
+                    <select name="pendidikan[tingkat_sekolah][]" class="form-select">
+                        <option value="">-- Pilih --</option>
+                        <option value="Dasar">Dasar</option>
+                        <option value="Lanjutan Pertama">Lanjutan Pertama</option>
+                        <option value="Lanjutan Atas">Lanjutan Atas</option>
+                        <option value="Universitas">Universitas</option>
+                        <option value="Kursus">Kursus</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nama Sekolah</label>
+                    <input type="text" name="pendidikan[nama_sekolah][]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Tahun Ijazah</label>
+                    <input type="text" name="pendidikan[tahun_ijazah][]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Jurusan</label>
+                    <input type="text" name="pendidikan[jurusan][]" class="form-control">
+                </div>
+            </div>
+        `;
+        wrapper.appendChild(item);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('removePendidikanBtn')) {
+            e.target.closest('.pendidikan-item').remove();
+        }
+    });
+
+</script> 
+@endpush
 
 @push('scripts')
 <script>
